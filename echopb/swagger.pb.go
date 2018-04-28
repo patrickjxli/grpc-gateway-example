@@ -1,15 +1,14 @@
-package echopb 
+package echopb
 
 const (
-swagger = `{
+	swagger = `{
   "swagger": "2.0",
   "info": {
     "title": "service.proto",
     "version": "version not set"
   },
   "schemes": [
-    "http",
-    "https"
+    "http"
   ],
   "consumes": [
     "application/json"

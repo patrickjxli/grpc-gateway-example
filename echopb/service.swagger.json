@@ -5,8 +5,7 @@
     "version": "version not set"
   },
   "schemes": [
-    "http",
-    "https"
+    "http"
   ],
   "consumes": [
     "application/json"
