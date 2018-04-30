@@ -21,10 +21,10 @@ import (
 	"github.com/spf13/cobra"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/grpclog"
 
-	pb "github.com/philips/grpc-gateway-example/echopb"
+	pb "github.com/Stoakes/grpc-gateway-example/echopb"
+	"github.com/Stoakes/grpc-gateway-example/server"
 )
 
 // echoCmd represents the echo command
@@ -32,17 +32,18 @@ var echoCmd = &cobra.Command{
 	Use:   "echo",
 	Short: "Example echo gRPC service CLI client",
 	Run: func(cmd *cobra.Command, args []string) {
-		var opts []grpc.DialOption
-		creds := credentials.NewClientTLSFromCert(demoCertPool, "localhost:10000")
-		opts = append(opts, grpc.WithTransportCredentials(creds))
-		conn, err := grpc.Dial(demoAddr, opts...)
+		opts := []grpc.DialOption{grpc.WithInsecure()}
+		conn, err := grpc.Dial(server.DemoAddr, opts...)
 		if err != nil {
 			grpclog.Fatalf("fail to dial: %v", err)
 		}
 		defer conn.Close()
 		client := pb.NewEchoServiceClient(conn)
 
-		msg, err := client.Echo(context.Background(), &pb.EchoMessage{strings.Join(os.Args[2:], " ")})
+		msg, err := client.Echo(context.Background(), &pb.EchoMessage{Value: strings.Join(os.Args[2:], " ")})
+		if err != nil {
+			grpclog.Fatalf("fail to echo: %v", err)
+		}
 		println(msg.Value)
 
 	},

@@ -2708,12 +2708,12 @@ var _third_partySwaggerUiIndexHtml = []byte(`<!DOCTYPE html>
       if (url && url.length > 1) {
         url = decodeURIComponent(url[1]);
       } else {
-        url = "../../swaggerapi";
+        url = "/swagger.json";
       }
       window.swaggerUi = new SwaggerUi({
         url: url,
         dom_id: "swagger-ui-container",
-        supportedSubmitMethods: [],
+        supportedSubmitMethods: ['get', 'put', 'post', 'delete', 'head', 'options', 'patch'],
         onComplete: function(swaggerApi, swaggerUi){
           if(typeof initOAuth == "function") {
             initOAuth({

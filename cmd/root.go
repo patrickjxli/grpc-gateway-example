@@ -39,7 +39,7 @@ Then you can hit it with the client:
 
 Or over HTTP 1.1 with curl:
 
-    curl -X POST -k https://localhost:10000/v1/echo -d '{"value": "foo"}'
+    curl -X POST -k http://localhost:10000/v1/echo -d '{"value": "foo"}'
 `,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
