@@ -1,8 +1,10 @@
 # gRPC + REST Gateway Play
 
-A modified version of the grpc-gateway-example to have both HTTP and gRPC on the same port, without TLS.
+_Experimentations around grpc-gateway_
 
-Server implementation is largely inspired from [Zenithar/go-password](https://github.com/Zenithar/go-password).
+**[master branch](https://github.com/stoakes/grpc-gateway-example)** A modified version of the grpc-gateway-example to have both HTTP and gRPC on the same port, without TLS. Server implementation is largely inspired from [Zenithar/go-password](https://github.com/Zenithar/go-password).
+
+**[gorilla-mux](https://github.com/Stoakes/grpc-gateway-example/tree/gorilla-mux)** grpc-gateway-example modified to use `gorilla/mux` as HTTP handler for routes standing aside of grpc-gateway.
 
 ## Installation & usage
 
@@ -18,9 +20,9 @@ $ curl -X POST -k http://localhost:10000/v1/echo -H "Content-Type: text/plain" -
 
 ## Features
 
- * A basic echo service returning value send as parameter. Available on port 10000, in both HTTP & GRPC, without TLS.
- * A swagger description of the service at `localhost:10000/swagger.json`
- * A swagger UI to interact with the REST API at `localhost:10000/swagger-ui/`
+- A basic echo service returning value send as parameter. Available on port 10000, in both HTTP & GRPC, without TLS.
+- A swagger description of the service at `localhost:10000/swagger.json`
+- A swagger UI to interact with the REST API at `localhost:10000/swagger-ui/`
 
 ## Mentions from the initial README
 
