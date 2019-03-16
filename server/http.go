@@ -11,6 +11,7 @@ import (
 
 	pb "github.com/Stoakes/grpc-gateway-example/echopb"
 	"github.com/Stoakes/grpc-gateway-example/pkg/ui/data/swagger"
+	mux "github.com/gorilla/mux"
 	assetfs "github.com/philips/go-bindata-assetfs"
 )
 
@@ -19,8 +20,13 @@ var (
 )
 
 func prepareHTTP(ctx context.Context, serverName string) (*http.Server, error) {
-	// HTTP router
-	router := http.NewServeMux()
+	// gorilla mux instead of default net/http handler
+	router := mux.NewRouter()
+	router.HandleFunc("/bonjour/{name}", func(w http.ResponseWriter, req *http.Request) {
+		vars := mux.Vars(req)
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("Bonjour " + vars["name"]))
+	})
 	router.HandleFunc("/swagger.json", func(w http.ResponseWriter, req *http.Request) {
 		io.Copy(w, strings.NewReader(pb.Swagger))
 	})
@@ -32,7 +38,13 @@ func prepareHTTP(ctx context.Context, serverName string) (*http.Server, error) {
 		log.Fatalln("Unable to initialize gRPC Gateway")
 		return nil, err
 	}
-	router.Handle("/", gw)
+
+	// Add a default matcher for everything that begins with /
+	router.PathPrefix("/").Handler(gw)
+
+	/**
+	 * Need to debug a router ? https://github.com/gorilla/mux/issues/186#issuecomment-249347077
+	 */
 
 	// Return HTTP Server instance
 	return &http.Server{
@@ -44,7 +56,7 @@ func prepareHTTP(ctx context.Context, serverName string) (*http.Server, error) {
 	}, nil
 }
 
-func serveSwagger(mux *http.ServeMux) {
+func serveSwagger(router *mux.Router) {
 	mime.AddExtensionType(".svg", "image/svg+xml")
 
 	// Expose files in third_party/swagger-ui/ on <host>/swagger-ui
@@ -54,5 +66,5 @@ func serveSwagger(mux *http.ServeMux) {
 		Prefix:   "third_party/swagger-ui",
 	})
 	prefix := "/swagger-ui/"
-	mux.Handle(prefix, http.StripPrefix(prefix, fileServer))
+	router.PathPrefix(prefix).Handler(http.StripPrefix(prefix, fileServer))
 }
